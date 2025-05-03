@@ -24,14 +24,14 @@ const audioSrc = `https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pok
 
 <MainLayout title={`Pokedex | ${name} - ${id}`}>
   <section
-    class=""
+    class="flex flex-col items-center justify-center gap-4"
   >
     <div>
       <a href="/" class="hover:underline hover:text-blue-500">Regresar</a>
       <h1 class="text-5xl capitalize">{name}</h1>
     </div>
 
-    <PokemonCard name={name} url={url} />
+    <PokemonCard name={name} url={url} isBig />
     <audio controls class="">
       <source src={audioSrc} type="audio/ogg" />
     </audio>
