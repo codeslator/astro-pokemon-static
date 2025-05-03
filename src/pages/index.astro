@@ -1,16 +1,22 @@
 ---
-import "../styles/global.css";
+import type { PokemonListResponse } from "../interfaces/pokemon-list-response";
+import MainLayout from "../layouts/MainLayout.astro";
+
+const response = await fetch("https://pokeapi.co/api/v2/pokemon");
+if (!response.ok) {
+	throw new Error("Failed to fetch data");
+}
+const data = (await response.json()) as PokemonListResponse;
+// const pokemons = data.results;
+
+console.log(data);
+
+const title = "Astro Pokedex | Home";
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<MainLayout title={title}>
+	<h1 class="text-3xl">Pokemon List</h1>
+	<ul>
+		{data.results.map((pokemon) => <li class="text-xl">{pokemon.name}</li>)}
+	</ul>
+</MainLayout>
