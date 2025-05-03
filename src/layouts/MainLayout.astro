@@ -1,26 +1,42 @@
 ---
 import { ClientRouter } from "astro:transitions";
 import "../styles/global.css";
+import { SITE_INFO } from "@/global/site-info";
 
 interface Props {
-  title: string;
+  title?: string;
+  image?: string;
+  description?: string;
+  author?: string;
 }
 
-const { title } = Astro.props;
+const {
+  title = SITE_INFO.title,
+  description = SITE_INFO.description,
+  image,
+  author = SITE_INFO.author,
+} = Astro.props;
 ---
 
 <html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>{title}</title>
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <!-- SEO -->
+    <meta name="description" content={description} />
+    <meta name="author" content={author} />
+    <!-- OG Tags -->
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={image} />
+    <title>{title}</title>
     <ClientRouter />
-	</head>
-	<body class="bg-slate-800 text-slate-200">
-		<main class="container mx-auto px-4 py-8">
+  </head>
+  <body class="bg-slate-800 text-slate-200">
+    <main class="container mx-auto px-4 py-8">
       <slot />
     </main>
-	</body>
+  </body>
 </html>

@@ -1,28 +1,28 @@
 ---
 import type { GetStaticPaths } from "astro";
-import type { PokemonListResponse } from "../../interfaces/pokemon-list-response";
-
-import MainLayout from "../../layouts/MainLayout.astro";
-import PokemonCard from "../../components/PokemonCard.astro";
+import PokemonCard from "@components/PokemonCard.astro";
+import MainLayout from "@layouts/MainLayout.astro";
+import type { PokemonListResponse } from "@interfaces/pokemon-list-response";
 
 export const getStaticPaths = (async () => {
   const response = await fetch("https://pokeapi.co/api/v2/pokemon?limit=151");
   const { results } = (await response.json()) as PokemonListResponse;
 
-  return results.map(({ name, url }) => ({
-    params: { name },
-    props: { name, url },
-  }));
+  return results.map(({ name, url }) => {
+    const id = url.split("/").at(-2);
+    return {
+      params: { id },
+      props: { name, url },
+    };
+  });
 }) satisfies GetStaticPaths;
 
-const { name } = Astro.params;
-const { url } = Astro.props;
-
-const id = url.split("/").at(-2);
+const { id } = Astro.params;
+const { url, name } = Astro.props;
 const audioSrc = `https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/${id}.ogg`;
 ---
 
-<MainLayout title={`Pokedex | ${name} - ${id}`}>
+<MainLayout title="Pokemon">
   <section
     class="flex flex-col items-center justify-center gap-4"
   >
@@ -37,9 +37,3 @@ const audioSrc = `https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pok
     </audio>
   </section>
 </MainLayout>
-
-<style>
-  /* a {
-    @apply hover:underline text-blue-500;
-  } */
-</style>
